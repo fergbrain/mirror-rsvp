@@ -195,10 +195,14 @@ function rsvp_frontend_main_form($attendeeID) {
 	
   }
 	$sql = "SELECT id, firstName, lastName FROM ".ATTENDEES_TABLE." 
-	 	WHERE (id IN (SELECT attendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE associatedAttendeeID = %d) 
-			OR id in (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)) 
-			 AND rsvpStatus <> 'NoResponse'";
-	$rsvpd = $wpdb->get_results($wpdb->prepare($sql, $attendeeID, $attendeeID));
+ 	WHERE (
+ 			id IN (SELECT attendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE associatedAttendeeID = %d) 
+		 OR id IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)
+		 OR id IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d))
+		) 
+		 AND id <> %d
+		 AND rsvpStatus <> 'NoResponse'";
+	$associations = $wpdb->get_results($wpdb->prepare($sql, $attendeeID, $attendeeID,$attendeeID, $attendeeID ));
 	if(count($rsvpd) > 0) {
     $form .= "<div class=\"rsvpAdditionalAttendee\">\r\n";
 		$form .= RSVP_START_PARA.__("The following people associated with you have already registered:", 'rsvp-plugin')." ";
@@ -209,12 +213,15 @@ function rsvp_frontend_main_form($attendeeID) {
     $form .= "</div>";
 	}
 	
-	$sql = "SELECT id, firstName, lastName, personalGreeting FROM ".ATTENDEES_TABLE." 
-	 	WHERE (id IN (SELECT attendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE associatedAttendeeID = %d) 
-			OR id in (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)) 
-			 AND rsvpStatus = 'NoResponse'";
-	
-	$associations = $wpdb->get_results($wpdb->prepare($sql, $attendeeID, $attendeeID));
+	$sql = "SELECT id, firstName, lastName personalGreeting FROM ".ATTENDEES_TABLE." 
+ 	WHERE (
+ 			id IN (SELECT attendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE associatedAttendeeID = %d) 
+		 OR id IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)
+		 OR id IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d))
+		) 
+		 AND id <> %d
+		 AND rsvpStatus = 'NoResponse'";
+	$associations = $wpdb->get_results($wpdb->prepare($sql, $attendeeID, $attendeeID,$attendeeID, $attendeeID ));
 	if(count($associations) > 0) {
 		$form .= "<h1>".__("The following people are associated with you.  At this time you can RSVP for them as well.", 'rsvp-plugin')."</h1>";
 		foreach($associations as $a) {
