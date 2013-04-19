@@ -191,7 +191,7 @@ function rsvp_frontend_main_form($attendeeID) {
 	if(get_option(RSVP_OPTION_HIDE_NOTE) != "Y") {
   	$form .= RSVP_START_PARA.$noteVerbiage.RSVP_END_PARA.
       rsvp_BeginningFormField("", "").
-        "<textarea name=\"rsvp_note\" id=\"rsvp_note\" rows=\"7\" cols=\"50\">".$attendee->note."</textarea>".RSVP_END_FORM_FIELD;
+        "<textarea name=\"rsvp_note\" id=\"rsvp_note\" rows=\"7\" cols=\"50\">".stripslashes($attendee->note)."</textarea>".RSVP_END_FORM_FIELD;
 	
   }
 	$sql = "SELECT id, firstName, lastName FROM ".ATTENDEES_TABLE." 
