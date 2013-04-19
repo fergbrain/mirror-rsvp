@@ -159,11 +159,10 @@ function rsvp_frontend_main_form($attendeeID) {
   
 	//$form .= RSVP_END_PARA;
 	$form .= rsvp_BeginningFormField("", "").
-    "<span class=\"radioLabel rsvpYesNo\">".$yesVerbiage."</span> "."<input class=\"regular-radio\" type=\"radio\" name=\"mainRsvp\" value=\"Y\" id=\"mainRsvpY\" ".(($attendee->rsvpStatus == "No") ? "" : "checked=\"checked\"")." /> <label for=\"mainRsvpY\"></label>".
+    "<input class=\"regular-radio\" type=\"radio\" name=\"mainRsvp\" value=\"Y\" id=\"mainRsvpY\" ".(($attendee->rsvpStatus == "No") ? "" : "checked=\"checked\"")." />"."&nbsp;<label for=\"mainRsvpY\">".$yesVerbiage."</label> ".
     RSVP_END_FORM_FIELD.
     rsvp_BeginningFormField("", "").
-      "<br /><span class=\"radioLabel rsvpYesNo\">".$noVerbiage."</span>&nbsp;&nbsp;&nbsp; "."<input class=\"regular-radio\" type=\"radio\" name=\"mainRsvp\" value=\"N\" id=\"mainRsvpN\" ".(($attendee->rsvpStatus == "No") ? "checked=\"checked\"" : "")." /> ".
-      "<label for=\"mainRsvpN\"></label>".
+      "<br />"."<input class=\"regular-radio\" type=\"radio\" name=\"mainRsvp\" value=\"N\" id=\"mainRsvpN\" ".(($attendee->rsvpStatus == "No") ? "checked=\"checked\"" : "")." /> "."&nbsp;<label for=\"mainRsvpN\">".$noVerbiage."</label>".
     RSVP_END_FORM_FIELD;
 	if(!empty($attendee->personalGreeting)) {
 		$form .= rsvp_BeginningFormField("rsvpCustomGreeting", "").nl2br(stripslashes($attendee->personalGreeting)).RSVP_END_FORM_FIELD;
@@ -220,15 +219,14 @@ function rsvp_frontend_main_form($attendeeID) {
 		$form .= "<h1>".__("The following people are associated with you.  At this time you can RSVP for them as well.", 'rsvp-plugin')."</h1>";
 		foreach($associations as $a) {
 			$form .= "<div class=\"rsvpAdditionalAttendee\">\r\n".
-							RSVP_START_PARA."<span>".
-                  sprintf(__("RSVP for %s?",'rsvp-plugin'), htmlspecialchars($a->firstName." ".$a->lastName))."</span> ". 
-									"&nbsp;" . "<input class=\"regular-checkbox\" type=\"checkbox\" name=\"rsvpFor".$a->id."\" id=\"rsvpFor".$a->id."\" value=\"Y\" />"."<label for=\"rsvpFor".$a->id."\">"."</label>".RSVP_END_PARA;
+							RSVP_START_PARA."<label for=\"rsvpFor".$a->id."\">".
+                  sprintf(__("RSVP for %s?",'rsvp-plugin'), htmlspecialchars($a->firstName." ".$a->lastName))."</label> ". 
+									"&nbsp;" . "<input class=\"regular-checkbox\" type=\"checkbox\" name=\"rsvpFor".$a->id."\" id=\"rsvpFor".$a->id."\" value=\"Y\" />".RSVP_END_PARA;
 			
 			$form .= rsvp_BeginningFormField("", "")."<p class=\"rsvpParagraph\">".sprintf(__(" Will %s be attending?", 'rsvp-plugin'), htmlspecialchars($a->firstName))."</p>".
-              "<span class=\"radioLabel rsvpYesNo\">$yesText</span> <input class=\"regular-radio\" type=\"radio\" name=\"attending".$a->id."\" value=\"Y\" id=\"attending".$a->id."Y\" checked=\"checked\" /> ".
-              "<label for=\"attending".$a->id."Y\"></label> 
-							<br /><span class=\"radioLabel rsvpYesNo\">$noText</span>&nbsp;&nbsp;&nbsp; <input class=\"regular-radio\" type=\"radio\" name=\"attending".$a->id."\" value=\"N\" id=\"attending".$a->id."N\" /> ".
-              "<label for=\"attending".$a->id."N\"></label>".
+              "<input class=\"regular-radio\" type=\"radio\" name=\"attending".$a->id."\" value=\"Y\" id=\"attending".$a->id."Y\" checked=\"checked\" />&nbsp;<label for=\"attending".$a->id."Y\">$yesText</label>".
+              "
+							<br /><input class=\"regular-radio\" type=\"radio\" name=\"attending".$a->id."\" value=\"N\" id=\"attending".$a->id."N\" />&nbsp;<label for=\"attending".$a->id."N\">$noText</label>".
               RSVP_END_FORM_FIELD;
 			
 			if(!empty($a->personalGreeting)) {
@@ -283,15 +281,15 @@ function rsvp_frontend_main_form($attendeeID) {
 												\"<div class=\\\"rsvpFormField\\\">\" + \r\n
                         \"	<label for=\\\"newAttending\" + numAdditional + \"FirstName\\\">".__("Person's first name", 'rsvp-plugin')."&nbsp;</label>\" + \r\n 
 													\"  <input type=\\\"text\\\" name=\\\"newAttending\" + numAdditional + \"FirstName\\\" id=\\\"newAttending\" + numAdditional + \"FirstName\\\" />\" + \r\n
-										  	\"</div>\" + \r\n
+										  	\"</div><br />\" + \r\n
 												\"<div class=\\\"rsvpFormField\\\">\" + \r\n
                         \"	<label for=\\\"newAttending\" + numAdditional + \"LastName\\\">".__("Person's last name", 'rsvp-plugin')."</label>\" + \r\n 
 													\"  <input type=\\\"text\\\" name=\\\"newAttending\" + numAdditional + \"LastName\\\" id=\\\"newAttending\" + numAdditional + \"LastName\\\" />\" + \r\n
-                        \"</div>\" + \r\n
+                        \"</div><br />\" + \r\n
 										  	\"<div class=\\\"rsvpFormField\\\">\" + \r\n
-														\"Will this person be attending?&nbsp;\" + \r\n
+														\"<span class=\\\"rsvpParagraph\\\">Will this person be attending?</span><br />\" + \r\n
 														\"<input type=\\\"radio\\\" name=\\\"newAttending\" + numAdditional + \"\\\" value=\\\"Y\\\" id=\\\"newAttending\" + numAdditional + \"Y\\\" checked=\\\"checked\\\" /> \" + 
-														\"<label for=\\\"newAttending\" + numAdditional + \"Y\\\">$yesText</label> \" + 
+														\"<label for=\\\"newAttending\" + numAdditional + \"Y\\\">$yesText</label><br /> \" + 
 														\"<input type=\\\"radio\\\" name=\\\"newAttending\" + numAdditional + \"\\\" value=\\\"N\\\" id=\\\"newAttending\" + numAdditional + \"N\\\"> <label for=\\\"newAttending\" + numAdditional + \"N\\\">$noText</label>\" + 
 													\"</div>\" + \r\n";
 												if(get_option(OPTION_HIDE_KIDS_MEAL) != "Y") {		
