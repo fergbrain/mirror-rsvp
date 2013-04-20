@@ -502,9 +502,11 @@ License: GPL
 							<?php
 								$sql = "SELECT firstName, lastName FROM ".ATTENDEES_TABLE." 
 								 	WHERE id IN (SELECT attendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE associatedAttendeeID = %d) 
-										OR id in (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)";
+										OR id in (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d)
+										OR id IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID IN (SELECT associatedAttendeeID FROM ".ASSOCIATED_ATTENDEES_TABLE." WHERE attendeeID = %d))
+										AND id <> %d";
 							
-								$associations = $wpdb->get_results($wpdb->prepare($sql, $attendee->id, $attendee->id));
+								$associations = $wpdb->get_results($wpdb->prepare($sql, $attendee->id, $attendee->id,$attendee->id,$attendee->id));
 								foreach($associations as $a) {
 									echo htmlentities(stripslashes($a->firstName." ".$a->lastName))."<br />";
 								}
