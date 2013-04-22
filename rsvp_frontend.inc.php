@@ -573,13 +573,15 @@ function rsvp_handlersvp(&$output, &$text) {
 		}
 					
 		if((get_option(OPTION_NOTIFY_ON_RSVP) == "Y") && (get_option(OPTION_NOTIFY_EMAIL) != "")) {
-			$sql = "SELECT firstName, lastName, rsvpStatus FROM ".ATTENDEES_TABLE." WHERE id= ".$attendeeID;
+			$sql = "SELECT firstName, lastName, rsvpStatus, note FROM ".ATTENDEES_TABLE." WHERE id= ".$attendeeID;
 			$attendee = $wpdb->get_results($sql);
 			if(count($attendee) > 0) {
 				$body = "Hello, \r\n\r\n";
 							
 				$body .= stripslashes($attendee[0]->firstName)." ".stripslashes($attendee[0]->lastName).
-								 " has submitted their RSVP and has RSVP'd with '".$attendee[0]->rsvpStatus."'.";
+								 " has submitted their RSVP and has RSVP'd with '".$attendee[0]->rsvpStatus."'.\r\n";
+								 
+				$body .= "They also included the following note: \r\n".stripslashes($attendee[0]->note);
 							
 				wp_mail(get_option(OPTION_NOTIFY_EMAIL), "New RSVP Submission", $body);
 			}
