@@ -228,7 +228,7 @@ function rsvp_frontend_main_form($attendeeID) {
 			$form .= "<div class=\"rsvpAdditionalAttendee\">\r\n".
 							RSVP_START_PARA."<label for=\"rsvpFor".$a->id."\">".
                   sprintf(__("RSVP for %s?",'rsvp-plugin'), htmlspecialchars($a->firstName." ".$a->lastName))."</label> ". 
-									"&nbsp;" . "<input class=\"regular-checkbox\" type=\"checkbox\" name=\"rsvpFor".$a->id."\" id=\"rsvpFor".$a->id."\" value=\"Y\" />".RSVP_END_PARA;
+									"&nbsp;" . "<input class=\"regular-checkbox\" type=\"checkbox\" name=\"rsvpFor".$a->id."\" id=\"rsvpFor".$a->id."\" value=\"Y\" checked />".RSVP_END_PARA;
 			
 			$form .= rsvp_BeginningFormField("", "")."<p class=\"rsvpParagraph\">".sprintf(__(" Will %s be attending?", 'rsvp-plugin'), htmlspecialchars($a->firstName))."</p>".
               "<input class=\"regular-radio\" type=\"radio\" name=\"attending".$a->id."\" value=\"Y\" id=\"attending".$a->id."Y\" checked=\"checked\" />&nbsp;<label for=\"attending".$a->id."Y\">$yesText</label>".
